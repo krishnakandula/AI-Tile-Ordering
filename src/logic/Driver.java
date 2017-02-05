@@ -1,3 +1,5 @@
+package logic;
+
 import controllers.StateController;
 import models.State;
 import models.Tile;
@@ -13,6 +15,8 @@ public class Driver {
     private StateController controller;
     private HashSet<State> visited;
     private List<State> stateHeap;
+    public static int numberOfChildren;
+
     public Driver(StateController controller){
         this.controller = controller;
         this.visited = new HashSet<>();
@@ -20,6 +24,7 @@ public class Driver {
 
     //Returns last state when finished
     public State runAlgorithm(String input){
+        numberOfChildren = input.length() - 1;
         //Get start state
         State start = new State(input);
         stateHeap = new ArrayList<>();
@@ -31,19 +36,21 @@ public class Driver {
             State current = controller.getState();
             stateHeap.add(current);
 
-            if(goalTest(current)) {
-                return current;
-            }
+            if(current != null) {
+                if (goalTest(current)) {
+                    return current;
+                }
 
-            if(!visited.contains(current)) {
-                visited.add(current);
-                //Get successors and add them to data struc
-                for (State succesor : generateSuccessors(current))
-                    controller.addState(succesor);
-            } else {
-                //Add 2 null children to heap
-                stateHeap.add(null);
-                stateHeap.add(null);
+                if (!visited.contains(current)) {
+                    visited.add(current);
+                    //Get successors and add them to data struc
+                    for (State succesor : generateSuccessors(current))
+                        controller.addState(succesor);
+                } else {
+                    //Add null children to heap
+                    for(int i = 0; i < numberOfChildren; i++)
+                        controller.addState(null);
+                }
             }
         }
         return null;
@@ -121,20 +128,10 @@ public class Driver {
 
     public String getFinalPath(State state){
         StringBuilder path = new StringBuilder();
-        //Create list of all the expanded states
-        List<State> expandedStates = new ArrayList<>();
-        //Add null to 0th position
-
-        while(state != null) {
-            expandedStates.add(state);
-            state = state.previous;
-        }
-        expandedStates.add(null);
-        Collections.reverse(expandedStates);
 
         TreeNode root = TreeNode.heapify(stateHeap);
-        path.append(pathFormat(expandedStates.get(1), -1, 0));
-        getFinalPathHelper(root, expandedStates.get(expandedStates.size() - 1), 1, path);
+        path.append(pathFormat(stateHeap.get(1), -1, 0));
+        getFinalPathHelper(root, stateHeap.get(stateHeap.size() - 1), 1, path);
         return path.toString();
     }
 
@@ -143,11 +140,13 @@ public class Driver {
             return;
 
         TreeNode next = null;
-        boolean leftContainsGoal = node.left.contains(goal);
-        if(node.left != null && leftContainsGoal)
-            next = node.left;
-        else
-            next = node.right;
+        for(TreeNode n : node.children){
+            if(n != null && n.contains(goal)){
+                next = n;
+                break;
+            }
+        }
+
         int indexMoved = isOneAway(node.value, next.value);
         path.append(pathFormat(next.value, indexMoved, iteration++));
         getFinalPathHelper(next, goal, iteration, path);

@@ -1,15 +1,13 @@
 import controllers.BFSController;
+import controllers.DFSController;
 import controllers.StateController;
+import logic.Driver;
 import models.State;
-import models.Tile;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Krishna Chaitanya Kandula on 2/3/17.
@@ -19,7 +17,7 @@ public class View {
     public static void main(String... args){
         //TODO: Get commandline arguments
         String input = getInput();
-        StateController controller = new BFSController();
+        StateController controller = new DFSController();
         Driver driver = new Driver(controller);
         State finalState = driver.runAlgorithm(input);
         System.out.println(driver.getFinalPath(finalState));
