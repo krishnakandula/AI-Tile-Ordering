@@ -32,18 +32,25 @@ public class TreeNode {
     public static TreeNode heapify(List<State> states){
         List<TreeNode> heap = new ArrayList<>();
         heap.add(null);
-        for(int i = 1; i < states.size(); i++)
-            heap.add(new TreeNode(states.get(i)));
+        for(int i = 1; i < states.size(); i++) {
+            if(states.get(i) == null)
+                heap.add(null);
+            else
+                heap.add(new TreeNode(states.get(i)));
+        }
 
         for(int i = 1; i < heap.size(); i++){
             TreeNode n = heap.get(i);
-            int leftIndex = i * 2;
-            int rightIndex = leftIndex + 1;
+            if(n != null) {
+                int leftIndex = i * 2;
+                int rightIndex = leftIndex + 1;
 
-            if(leftIndex < heap.size())
-                n.left = heap.get(leftIndex);
-            if(rightIndex < heap.size())
-                n.right = heap.get(rightIndex);
+                if (leftIndex < heap.size()) {
+                    n.left = heap.get(leftIndex);
+                }
+                if (rightIndex < heap.size())
+                    n.right = heap.get(rightIndex);
+            }
         }
         return heap.get(1);
     }

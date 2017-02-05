@@ -12,7 +12,7 @@ public class Driver {
 
     private StateController controller;
     private HashSet<State> visited;
-
+    private List<State> stateHeap;
     public Driver(StateController controller){
         this.controller = controller;
         this.visited = new HashSet<>();
@@ -22,26 +22,28 @@ public class Driver {
     public State runAlgorithm(String input){
         //Get start state
         State start = new State(input);
+        stateHeap = new ArrayList<>();
+        stateHeap.add(null);
 
         controller.addState(start);
-        State prev = start;
 
         while(!controller.isEmpty()){
             State current = controller.getState();
+            stateHeap.add(current);
 
             if(goalTest(current)) {
-                current.setPrevious(prev);
                 return current;
             }
-            //Set current state
-            current.setPrevious(prev);
-            prev = current;
 
             if(!visited.contains(current)) {
                 visited.add(current);
                 //Get successors and add them to data struc
                 for (State succesor : generateSuccessors(current))
                     controller.addState(succesor);
+            } else {
+                //Add 2 null children to heap
+                stateHeap.add(null);
+                stateHeap.add(null);
             }
         }
         return null;
@@ -130,7 +132,7 @@ public class Driver {
         expandedStates.add(null);
         Collections.reverse(expandedStates);
 
-        TreeNode root = TreeNode.heapify(expandedStates);
+        TreeNode root = TreeNode.heapify(stateHeap);
         path.append(pathFormat(expandedStates.get(1), -1, 0));
         getFinalPathHelper(root, expandedStates.get(expandedStates.size() - 1), 1, path);
         return path.toString();
@@ -141,7 +143,8 @@ public class Driver {
             return;
 
         TreeNode next = null;
-        if(node != null && node.left.contains(goal))
+        boolean leftContainsGoal = node.left.contains(goal);
+        if(node.left != null && leftContainsGoal)
             next = node.left;
         else
             next = node.right;
