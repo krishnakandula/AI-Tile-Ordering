@@ -11,6 +11,8 @@ public class State {
     public List<Tile> tileList;
     public boolean isRoot;
     public State parent;
+    public int gCost;
+    public int hCost;
 
     //For creating the start state
     public State(String input){
@@ -19,6 +21,7 @@ public class State {
             tileList.add(new Tile(input.charAt(i)));
         }
         isRoot = true;
+        gCost = 0;
     }
 
     //Copy constructor
@@ -27,6 +30,8 @@ public class State {
         for(Tile t : state.tileList)
             this.tileList.add(t);
         isRoot = false;
+        this.gCost = state.gCost;
+        this.hCost = state.hCost;
     }
 
     @Override

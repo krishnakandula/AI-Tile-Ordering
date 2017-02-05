@@ -1,6 +1,4 @@
-import controllers.BFSController;
-import controllers.DFSController;
-import controllers.StateController;
+import controllers.*;
 import logic.Driver;
 import models.State;
 
@@ -13,18 +11,22 @@ import java.io.IOException;
  * Created by Krishna Chaitanya Kandula on 2/3/17.
  */
 public class View {
-    private static final String INPUT_FILE_PATH = new File("").getAbsolutePath().concat("/input.txt");
+
+    private static final String INPUT_FILE_PATH = new File("")
+            .getAbsolutePath()
+            .concat("/input.txt");
+
     public static void main(String... args){
         //TODO: Get commandline arguments
         String input = getInput();
-        StateController controller = new DFSController();
+        StateController controller = new GSController();
         Driver driver = new Driver(controller);
         State finalState = driver.runAlgorithm(input);
         System.out.println(driver.getFinalPath(finalState));
     }
 
     private static String getInput(){
-        //Initalize readers
+        //Initialize readers
         String initialState = null;
         FileReader fileReader = null;
         BufferedReader reader = null;
