@@ -25,4 +25,9 @@ public class BFSController implements StateController {
     public State getState() {
         return dataStruc.poll();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return dataStruc.isEmpty();
+    }
 }

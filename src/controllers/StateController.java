@@ -8,4 +8,5 @@ import models.State;
 public interface StateController {
     void addState(State s);
     State getState();
+    boolean isEmpty();
 }

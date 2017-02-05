@@ -10,9 +10,21 @@ public class State implements Comparable<State> {
 
     public State previous;
     public List<Tile> tileList;
+    public boolean isRoot;
 
-    public State(List<Tile> tiles){
-        this.tileList = tiles;
+    //For creating the start state
+    public State(String input){
+        this.previous = null;
+        tileList = new ArrayList<>();
+        for(int i = 0; i < input.length(); i++){
+            tileList.add(new Tile(input.charAt(i)));
+        }
+        isRoot = true;
+    }
+
+    public void setPrevious(State previous) {
+        if(!this.isRoot)
+            this.previous = previous;
     }
 
     //Copy constructor
@@ -21,6 +33,7 @@ public class State implements Comparable<State> {
         for(Tile t : state.tileList)
             this.tileList.add(t);
         this.previous = state.previous;
+        isRoot = false;
     }
 
     @Override
@@ -30,5 +43,10 @@ public class State implements Comparable<State> {
                 return -1;
         }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return tileList.toString();
     }
 }
