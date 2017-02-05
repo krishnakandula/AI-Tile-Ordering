@@ -13,10 +13,12 @@ public class Driver {
 
     private StateController controller;
     private HashSet<State> visited;
+    private boolean costFlag;
 
-    public Driver(StateController controller){
+    public Driver(StateController controller, boolean costFlag){
         this.controller = controller;
         this.visited = new HashSet<>();
+        this.costFlag = costFlag;
     }
 
     //Returns last state when finished
@@ -57,7 +59,6 @@ public class Driver {
                 //Create clone
                 State successor = new State(state);
                 successor.parent = state;
-                successor.gCost = state.gCost + 1;
 
                 List<Tile> successorList = successor.tileList;
 
@@ -65,7 +66,9 @@ public class Driver {
                 Tile temp = successorList.get(i);
                 successorList.set(i, successorList.get(spaceIndex));
                 successorList.set(spaceIndex, temp);
+
                 successor.hCost = goalTest(successor);
+                successor.gCost = getGCost(state.gCost, i, spaceIndex);
 
                 successors.add(successor);
             }
@@ -82,6 +85,12 @@ public class Driver {
             }
         }
         return spaceIndex;
+    }
+
+    private int getGCost(int currentGCost, int currentIndex, int spaceIndex){
+        if(costFlag)
+            return Math.abs(currentIndex - spaceIndex);
+        return currentGCost + 1;
     }
 
     //Returns number of tiles out of place
@@ -158,7 +167,9 @@ public class Driver {
         StringBuilder builder = new StringBuilder(String.format("Step %d:   ", iteration));
         if(indexMoved >= 0)
             builder.append(String.format("move %d ", indexMoved));
-        builder.append(current).append(" \n");
-        return builder.toString();
+        builder.append(current);
+        if(costFlag && indexMoved >= 0)
+            builder.append(String.format("  (c=%d)", current.gCost));
+        return builder.append("\n").toString();
     }
 }

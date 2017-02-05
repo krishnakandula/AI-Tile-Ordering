@@ -19,8 +19,8 @@ public class View {
     public static void main(String... args){
         //TODO: Get commandline arguments
         String input = getInput();
-        StateController controller = new AStarController();
-        Driver driver = new Driver(controller);
+        StateController controller = new UCSController();
+        Driver driver = new Driver(controller, false);
         State finalState = driver.runAlgorithm(input);
         System.out.println(driver.getFinalPath(finalState));
     }
