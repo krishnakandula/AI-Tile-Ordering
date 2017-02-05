@@ -10,6 +10,7 @@ public class State {
 
     public List<Tile> tileList;
     public boolean isRoot;
+    public State parent;
 
     //For creating the start state
     public State(String input){

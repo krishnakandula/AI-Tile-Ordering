@@ -27,6 +27,8 @@ public class Driver {
         numberOfChildren = input.length() - 1;
         //Get start state
         State start = new State(input);
+        start.parent = null;
+
         stateHeap = new ArrayList<>();
         stateHeap.add(null);
 
@@ -44,12 +46,8 @@ public class Driver {
                 if (!visited.contains(current)) {
                     visited.add(current);
                     //Get successors and add them to data struc
-                    for (State succesor : generateSuccessors(current))
-                        controller.addState(succesor);
-                } else {
-                    //Add null children to heap
-                    for(int i = 0; i < numberOfChildren; i++)
-                        controller.addState(null);
+                    for (State successor : generateSuccessors(current))
+                        controller.addState(successor);
                 }
             }
         }
@@ -63,15 +61,16 @@ public class Driver {
         for(int i = 0; i < tiles.size(); i++){
             if(i != spaceIndex) {
                 //Create clone
-                State succsesor = new State(state);
-                List<Tile> successorList = succsesor.tileList;
+                State successor = new State(state);
+                successor.parent = state;
+                List<Tile> successorList = successor.tileList;
 
                 //Swap place of current tile and space
                 Tile temp = successorList.get(i);
                 successorList.set(i, successorList.get(spaceIndex));
                 successorList.set(spaceIndex, temp);
 
-                successors.add(succsesor);
+                successors.add(successor);
             }
         }
         return successors;
@@ -129,9 +128,28 @@ public class Driver {
     public String getFinalPath(State state){
         StringBuilder path = new StringBuilder();
 
-        TreeNode root = TreeNode.heapify(stateHeap);
-        path.append(pathFormat(stateHeap.get(1), -1, 0));
-        getFinalPathHelper(root, stateHeap.get(stateHeap.size() - 1), 1, path);
+//        TreeNode root = TreeNode.heapify(stateHeap);
+//        path.append(pathFormat(stateHeap.get(1), -1, 0));
+//        getFinalPathHelper(root, stateHeap.get(stateHeap.size() - 1), 1, path);
+
+        Stack<State> statePath = new Stack<>();
+
+        while(state != null){
+            statePath.push(state);
+            state = state.parent;
+        }
+        State prev = statePath.pop();
+        path.append(pathFormat(prev, -1, 0));
+
+        int iteration = 1;
+        while(!statePath.isEmpty()) {
+            State current = statePath.pop();
+            int indexMoved = isOneAway(prev, current);
+            String formattedPath = pathFormat(current, indexMoved, iteration++);
+            path.append(formattedPath);
+            prev = current;
+        }
+
         return path.toString();
     }
 
