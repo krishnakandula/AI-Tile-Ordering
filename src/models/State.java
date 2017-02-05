@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Krishna Chaitanya Kandula on 2/3/17.
  */
-public class State implements Comparable<State> {
+public class State {
 
     public State previous;
     public List<Tile> tileList;
@@ -37,16 +37,26 @@ public class State implements Comparable<State> {
     }
 
     @Override
-    public int compareTo(State o) {
+    public boolean equals(Object obj) {
+        State o = (State) obj;
         for(int i = 0; i < tileList.size(); i++){
             if(!tileList.get(i).equals(o.tileList.get(i)))
-                return -1;
+                return false;
         }
-        return 0;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return tileList.hashCode();
     }
 
     @Override
     public String toString() {
-        return tileList.toString();
+        StringBuilder builder = new StringBuilder();
+        for(Tile t : tileList)
+            builder.append(t.toString());
+
+        return builder.toString();
     }
 }
