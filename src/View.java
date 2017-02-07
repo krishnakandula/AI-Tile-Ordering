@@ -12,9 +12,9 @@ import java.util.Arrays;
  */
 public class View {
 
-    private static final String INPUT_FILE_PATH = new File("")
+    private static String INPUT_FILE_PATH = new File("")
             .getAbsolutePath()
-            .concat("/input.txt");
+            .concat("/");
     
     public static void main(String... args){
         if(args.length < 3 || args.length > 4) {
@@ -38,8 +38,8 @@ public class View {
             controller = ControllerFactory.getController(args[1]);
             inputFileName = args[2];
         }
-
-        INPUT_FILE_PATH.concat(inputFileName);
+		
+        INPUT_FILE_PATH = INPUT_FILE_PATH.concat(inputFileName);
         String input = getTileInput();
         Driver driver = new Driver(controller, costFlag);
         State finalState = driver.runAlgorithm(input);
