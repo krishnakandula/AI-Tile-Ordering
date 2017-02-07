@@ -1,7 +1,6 @@
 import controllers.*;
 import logic.Driver;
 import models.State;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,9 +17,6 @@ public class View {
             .concat("/input.txt");
     
     public static void main(String... args){
-        //TODO: Get commandline arguments
-        System.out.println(Arrays.toString(args));
-
         if(args.length < 3 || args.length > 4) {
             System.out.println("Invalid arguments: " + Arrays.toString(args));
             System.exit(0);

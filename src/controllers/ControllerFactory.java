@@ -5,7 +5,6 @@ package controllers;
  */
 public class ControllerFactory {
     public static StateController getController(String controllerType){
-        controllerType = controllerType.toLowerCase();
         switch (controllerType){
             case "DFS":
                 return new DFSController();

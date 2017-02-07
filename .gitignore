@@ -8,3 +8,6 @@ out/
 
 #Mac
 .DS_Store
+
+#Input files
+*.txt
