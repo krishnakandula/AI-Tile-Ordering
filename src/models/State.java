@@ -13,6 +13,8 @@ public class State {
     public State parent;
     public int gCost;
     public int hCost;
+    public int totalCost;       //totalCost is the total gCost in the path expanded so far
+    public int priority;
 
     //For creating the start state
     public State(String input){
@@ -22,6 +24,7 @@ public class State {
         }
         isRoot = true;
         gCost = 0;
+        totalCost = 0;
     }
 
     //Copy constructor

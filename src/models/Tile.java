@@ -51,6 +51,6 @@ public class Tile{
             return 1;
         if(color == black)
             return 2;
-        return 0;
+        return 3;
     }
 }

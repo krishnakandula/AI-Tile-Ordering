@@ -32,7 +32,6 @@ public class Driver {
 
         while(!controller.isEmpty()){
             State current = controller.getState();
-
             if(current != null) {
                 //Goal test
                 if (current.hCost == 0)
@@ -42,8 +41,6 @@ public class Driver {
                     visited.add(current);
                     //Get successors and add them to data structure
                     controller.addStates(generateSuccessors(current));
-//                    for (State successor : generateSuccessors(current))
-//                        controller.addState(successor);
                 }
             }
         }
@@ -56,7 +53,6 @@ public class Driver {
         int spaceIndex = getSpaceIndex(tiles);
         for(int i = 0; i < tiles.size(); i++){
             if(i != spaceIndex) {
-
                 //Create clone
                 State successor = new State(state);
                 successor.parent = state;
@@ -69,7 +65,7 @@ public class Driver {
                 successorList.set(spaceIndex, temp);
 
                 successor.hCost = goalTest(successor);
-                successor.gCost = getGCost(state.gCost, i, spaceIndex);
+                getGCost(state, successor, i, spaceIndex);
 
                 successors.add(successor);
             }
@@ -88,10 +84,14 @@ public class Driver {
         return spaceIndex;
     }
 
-    private int getGCost(int currentGCost, int currentIndex, int spaceIndex){
-        if(costFlag)
-            return Math.abs(currentIndex - spaceIndex);
-        return currentGCost + 1;
+    private void getGCost(State current, State successor, int currentIndex, int spaceIndex){
+        if(costFlag) {
+            successor.gCost = Math.abs(currentIndex - spaceIndex);
+            successor.totalCost = current.totalCost + Math.abs(currentIndex - spaceIndex);
+        } else {
+            successor.gCost = current.gCost + 1;
+            successor.totalCost = successor.gCost;
+        }
     }
 
     //Returns number of tiles out of place
@@ -102,16 +102,16 @@ public class Driver {
 
         //Check all tiles left of spaceIndex
         for(int i = 0; i < center; i++){
-            if(tiles.get(i).color != Tile.Color.black)
+            if(tiles.get(i).color != Tile.Color.space && tiles.get(i).color != Tile.Color.black)
                 tilesOutOfPlace++;
         }
         //Check all tiles right of spaceIndex
         for(int i = center + 1; i < tiles.size(); i++){
-            if(tiles.get(i).color != Tile.Color.white)
+            if(tiles.get(i).color != Tile.Color.space && tiles.get(i).color != Tile.Color.white)
                 tilesOutOfPlace++;
         }
 
-        //Check center tile
+//        Check center tile
         if(tiles.get(center).color != Tile.Color.space)
             tilesOutOfPlace++;
 

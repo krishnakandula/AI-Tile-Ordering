@@ -2,7 +2,6 @@ package controllers;
 
 import models.State;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -12,10 +11,10 @@ import java.util.PriorityQueue;
  */
 public class AStarController implements StateController{
     private PriorityQueue<State> dataStruc;
-
+    private int priority;
     public AStarController(){
         dataStruc = new PriorityQueue<>(new StateComparator());
-//        dataStruc = new PriorityQueue<>(Collections.reverseOrder(new StateComparator()));
+        priority = 0;
     }
 
     @Override
@@ -25,8 +24,10 @@ public class AStarController implements StateController{
 
     @Override
     public void addStates(List<State> states) {
-        for(State s : states)
+        for(State s : states) {
+            s.priority = priority++;
             addState(s);
+        }
     }
 
     @Override
@@ -42,10 +43,12 @@ public class AStarController implements StateController{
     class StateComparator implements Comparator<State>{
         @Override
         public int compare(State o1, State o2) {
-            int o1Cost = o1.gCost + o1.hCost;
-            int o2Cost = o2.gCost + o2.hCost;
+            int o1Cost = o1.totalCost + o1.hCost;
+            int o2Cost = o2.totalCost + o2.hCost;
 
-            return o1Cost - o2Cost;
+            if(o1Cost != o2Cost)
+                return o1Cost - o2Cost;
+            return o1.priority - o2.priority;
         }
     }
 }

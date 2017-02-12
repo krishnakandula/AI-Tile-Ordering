@@ -1,8 +1,6 @@
 package controllers;
 
 import models.State;
-
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -12,28 +10,30 @@ import java.util.PriorityQueue;
  */
 public class UCSController implements StateController{
     PriorityQueue<State> dataStruc;
+    private int priority;
 
-    public UCSController(boolean costFlag){
-        if(costFlag)
-            dataStruc = new PriorityQueue<>(Collections.reverseOrder(new StateComparator()));
-        else
-            dataStruc = new PriorityQueue<>(new StateComparator());
+    public UCSController(){
+        dataStruc = new PriorityQueue<>(new StateComparator());
+        priority = 0;
     }
 
     @Override
     public void addState(State s) {
+        s.priority = priority++;
         dataStruc.offer(s);
     }
 
     @Override
     public void addStates(List<State> states) {
-        for(State s : states)
+        for(State s : states) {
             addState(s);
+        }
     }
 
     @Override
     public State getState() {
-        return dataStruc.poll();
+        State current = dataStruc.poll();
+        return current;
     }
 
     @Override
@@ -44,7 +44,10 @@ public class UCSController implements StateController{
     class StateComparator implements Comparator<State>{
         @Override
         public int compare(State o1, State o2) {
-            return o1.gCost - o2.gCost;
+            if(o1.totalCost != o2.totalCost)
+                return o1.totalCost - o2.totalCost;
+            //If total gCost is the same, use priority to determine position in queue
+            return o1.priority - o2.priority;
         }
     }
 }

@@ -28,14 +28,15 @@ public class View {
         }
 
         boolean costFlag = false;
-        String inputFileName = "input.txt";
-        StateController controller = new BFSController();
+        String inputFileName;
+        StateController controller;
+
         if(args[1].equals("-cost")){
             costFlag = true;
-            controller = ControllerFactory.getController(args[2], costFlag);
+            controller = ControllerFactory.getController(args[2]);
             inputFileName = args[3];
         } else {
-            controller = ControllerFactory.getController(args[1], costFlag);
+            controller = ControllerFactory.getController(args[1]);
             inputFileName = args[2];
         }
 		
