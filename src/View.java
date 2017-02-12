@@ -32,10 +32,10 @@ public class View {
         StateController controller = new BFSController();
         if(args[1].equals("-cost")){
             costFlag = true;
-            controller = ControllerFactory.getController(args[2]);
+            controller = ControllerFactory.getController(args[2], costFlag);
             inputFileName = args[3];
         } else {
-            controller = ControllerFactory.getController(args[1]);
+            controller = ControllerFactory.getController(args[1], costFlag);
             inputFileName = args[2];
         }
 		

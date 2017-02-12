@@ -41,8 +41,9 @@ public class Driver {
                 if (!visited.contains(current)) {
                     visited.add(current);
                     //Get successors and add them to data structure
-                    for (State successor : generateSuccessors(current))
-                        controller.addState(successor);
+                    controller.addStates(generateSuccessors(current));
+//                    for (State successor : generateSuccessors(current))
+//                        controller.addState(successor);
                 }
             }
         }

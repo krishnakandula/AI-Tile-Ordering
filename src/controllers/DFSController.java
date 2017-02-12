@@ -1,6 +1,9 @@
 package controllers;
 
 import models.State;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -16,6 +19,13 @@ public class DFSController implements StateController{
     @Override
     public void addState(State s) {
         dataStruc.push(s);
+    }
+
+    @Override
+    public void addStates(List<State> states) {
+        Collections.reverse(states);
+        for(State s : states)
+            addState(s);
     }
 
     @Override

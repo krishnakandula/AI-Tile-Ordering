@@ -44,4 +44,13 @@ public class Tile{
 
         return (this.color == ((Tile) obj).color);
     }
+
+    @Override
+    public int hashCode() {
+        if(color == white)
+            return 1;
+        if(color == black)
+            return 2;
+        return 0;
+    }
 }

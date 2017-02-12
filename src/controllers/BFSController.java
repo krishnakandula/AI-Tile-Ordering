@@ -3,6 +3,7 @@ package controllers;
 import models.State;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -19,6 +20,12 @@ public class BFSController implements StateController {
     @Override
     public void addState(State s) {
         dataStruc.offer(s);
+    }
+
+    @Override
+    public void addStates(List<State> states) {
+        for(State s : states)
+            addState(s);
     }
 
     @Override
