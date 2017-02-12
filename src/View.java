@@ -12,6 +12,7 @@ import java.util.Arrays;
  */
 public class View {
 
+    //Creates the initial path to the input file
     private static String INPUT_FILE_PATH = new File("")
             .getAbsolutePath()
             .concat("/");
@@ -31,6 +32,7 @@ public class View {
         String inputFileName;
         StateController controller;
 
+        //Read input based on if cost flag is high
         if(args[1].equals("-cost")){
             costFlag = true;
             controller = ControllerFactory.getController(args[2]);
@@ -39,14 +41,19 @@ public class View {
             controller = ControllerFactory.getController(args[1]);
             inputFileName = args[2];
         }
-		
+
         INPUT_FILE_PATH = INPUT_FILE_PATH.concat(inputFileName);
         String input = getTileInput();
         Driver driver = new Driver(controller, costFlag);
+
         State finalState = driver.runAlgorithm(input);
         System.out.println(driver.getFinalPath(finalState));
     }
 
+    /**
+     * Reads the input from the input file
+     * @return the String containing the input
+     */
     private static String getTileInput(){
         //Initialize readers
         String initialState = null;

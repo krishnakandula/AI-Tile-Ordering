@@ -21,13 +21,18 @@ public class Driver {
         this.costFlag = costFlag;
     }
 
-    //Returns last state when finished
+    /**
+     * Runs the generic search algorithm
+     * @param input the initial state provided by the input file
+     * @return the goal state that contains its path
+     */
     public State runAlgorithm(String input){
         //Get start state
         State start = new State(input);
         start.hCost = goalTest(start);
         start.parent = null;
 
+        //Add the initial state to the data structure
         controller.addState(start);
 
         while(!controller.isEmpty()){
@@ -47,13 +52,18 @@ public class Driver {
         return null;
     }
 
+    /**
+     * Generates the successors of state using the successor function
+     * @param state the state to generate successors for
+     * @return the list of successor states
+     */
     private List<State> generateSuccessors(State state){
         List<Tile> tiles = state.tileList;
         List<State> successors = new ArrayList<>();
         int spaceIndex = getSpaceIndex(tiles);
         for(int i = 0; i < tiles.size(); i++){
             if(i != spaceIndex) {
-                //Create clone
+                //Create clone of current state
                 State successor = new State(state);
                 successor.parent = state;
 
@@ -73,6 +83,11 @@ public class Driver {
         return successors;
     }
 
+    /**
+     * Finds where the space tile is in a state
+     * @param tiles the set of tiles of a state
+     * @return the index of the space tile
+     */
     private int getSpaceIndex(List<Tile> tiles){
         int spaceIndex = 0;
         for(int i = 0; i < tiles.size(); i++){
@@ -84,17 +99,30 @@ public class Driver {
         return spaceIndex;
     }
 
-    private void getGCost(State current, State successor, int currentIndex, int spaceIndex){
+    /**
+     * Gets the gCost of a state determined by the cost flag
+     * @param parent the parent state
+     * @param successor the state for which the gCost is being calculated
+     * @param currentIndex the latest index where a tile was swapped
+     * @param spaceIndex the index that contains the space tile
+     */
+    private void getGCost(State parent, State successor, int currentIndex, int spaceIndex){
         if(costFlag) {
             successor.gCost = Math.abs(currentIndex - spaceIndex);
-            successor.totalCost = current.totalCost + Math.abs(currentIndex - spaceIndex);
+            successor.totalCost = parent.totalCost + Math.abs(currentIndex - spaceIndex);
         } else {
-            successor.gCost = current.gCost + 1;
+            successor.gCost = parent.gCost + 1;
             successor.totalCost = successor.gCost;
         }
     }
 
     //Returns number of tiles out of place
+
+    /**
+     * Checks whether the current state is the goal state by calculating the number of tiles out of place
+     * @param current the state that is being checked
+     * @return the number of tiles out of place
+     */
     private int goalTest(State current){
         List<Tile> tiles = current.tileList;
         int tilesOutOfPlace = 0;
@@ -111,13 +139,19 @@ public class Driver {
                 tilesOutOfPlace++;
         }
 
-//        Check center tile
+        //Check center tile
         if(tiles.get(center).color != Tile.Color.space)
             tilesOutOfPlace++;
 
         return tilesOutOfPlace;
     }
 
+    /**
+     * Calculates the number of indices a tile has moved from its previous state
+     * @param s1
+     * @param s2
+     * @return the number of indices a tile has moved
+     */
     private int isOneAway(State s1, State s2){
         int diff = 2;
         List<Tile> s1Tiles = s1.tileList;
@@ -140,6 +174,11 @@ public class Driver {
         return swapIndex;
     }
 
+    /**
+     * Generates the path to the goal state
+     * @param state the goal state
+     * @return the String containing the path
+     */
     public String getFinalPath(State state){
         StringBuilder path = new StringBuilder();
         Stack<State> statePath = new Stack<>();
@@ -164,6 +203,13 @@ public class Driver {
         return path.toString();
     }
 
+    /**
+     * Helps format the final path to meet requirements
+     * @param current the current state
+     * @param indexMoved the index a tile moved from its previous state
+     * @param iteration the number of states so far
+     * @return the formatted String for the state
+     */
     private String pathFormat(State current, int indexMoved, int iteration){
         StringBuilder builder = new StringBuilder(String.format("Step %d:   ", iteration));
         if(indexMoved >= 0)

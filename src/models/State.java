@@ -27,7 +27,10 @@ public class State {
         totalCost = 0;
     }
 
-    //Copy constructor
+    /**
+     * Copy constructor
+     * @param state the state to be copied
+     */
     public State(State state){
         this.tileList = new ArrayList<>();
         for(Tile t : state.tileList)
@@ -49,7 +52,7 @@ public class State {
 
     @Override
     public int hashCode() {
-        return tileList.hashCode();
+        return tileList.hashCode();     //Generate hash based on tileList
     }
 
     @Override

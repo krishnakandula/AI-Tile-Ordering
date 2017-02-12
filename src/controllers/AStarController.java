@@ -12,6 +12,7 @@ import java.util.PriorityQueue;
 public class AStarController implements StateController{
     private PriorityQueue<State> dataStruc;
     private int priority;
+
     public AStarController(){
         dataStruc = new PriorityQueue<>(new StateComparator());
         priority = 0;
