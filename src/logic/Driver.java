@@ -97,21 +97,21 @@ public class Driver {
     //Returns number of tiles out of place
     private int goalTest(State current){
         List<Tile> tiles = current.tileList;
-        int spaceIndex = getSpaceIndex(tiles);
         int tilesOutOfPlace = 0;
+        int center = tiles.size() / 2;
+
         //Check all tiles left of spaceIndex
-        for(int i = 0; i < spaceIndex; i++){
+        for(int i = 0; i < center; i++){
             if(tiles.get(i).color != Tile.Color.black)
                 tilesOutOfPlace++;
         }
         //Check all tiles right of spaceIndex
-        for(int i = spaceIndex + 1; i < tiles.size(); i++){
+        for(int i = center + 1; i < tiles.size(); i++){
             if(tiles.get(i).color != Tile.Color.white)
                 tilesOutOfPlace++;
         }
 
         //Check center tile
-        int center = tiles.size() / 2;
         if(tiles.get(center).color != Tile.Color.space)
             tilesOutOfPlace++;
 
